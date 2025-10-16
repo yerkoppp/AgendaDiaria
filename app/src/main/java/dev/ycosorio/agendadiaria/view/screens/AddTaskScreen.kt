@@ -28,10 +28,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,8 +51,8 @@ import dev.ycosorio.agendadiaria.viewmodel.TaskListViewModel
  * Pantalla para crear una nueva tarea.
  *
  * Proporciona campos de texto para el nombre, descripción, fecha y hora de la tarea.
- * Utiliza un [Scaffold] con una [TopAppBar] para navegación, una [BottomAppBar] para acciones secundarias
- * y un [FloatingActionButton] para la acción principal de guardar.
+ * Muestra una confirmación (Snackbar) al guardar una tarea y permite al usuario
+ * añadir múltiples tareas sin abandonar la pantalla.
  *
  * @param taskListViewModel La instancia del ViewModel que gestiona el estado.
  * @param uiState El estado actual de la UI, observado desde el ViewModel.
@@ -66,6 +69,19 @@ fun AddTaskScreen(
 ) {
     var showDatePickerDialog by remember { mutableStateOf(false) }
     var showTimePickerDialog by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    // Efecto para escuchar y mostrar los mensajes de confirmación del ViewModel
+    LaunchedEffect(uiState.snackbarMessage) {
+        uiState.snackbarMessage?.let { message ->
+            // 👇 Ahora especificamos que la duración sea larga
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+            taskListViewModel.snackbarMessageShown()
+        }
+    }
 
     if (showDatePickerDialog) {
         CustomDatePickerDialog(
@@ -101,7 +117,6 @@ fun AddTaskScreen(
             FloatingActionButton(
                 onClick = {
                     taskListViewModel.saveTask()
-                    navigateToTaskList() // Navega a la lista después de guardar
                 },
                 containerColor = MaterialTheme.colorScheme.secondary
             ) {

@@ -13,6 +13,7 @@ import dev.ycosorio.agendadiaria.view.screens.DetailsScreen
 import dev.ycosorio.agendadiaria.view.screens.HomeScreen
 import dev.ycosorio.agendadiaria.view.screens.TaskListScreen
 import dev.ycosorio.agendadiaria.viewmodel.TaskListViewModel
+import dev.ycosorio.agendadiaria.data.toDetails
 
 @Composable
 fun AppNavigation(){
@@ -22,7 +23,7 @@ fun AppNavigation(){
     NavHost(navController = navController, startDestination = Home){
         composable<Home>{
             HomeScreen(
-                navigateToAddTask = { navController.navigate(AddTask) }
+                navigateToAddTask = { navController.navigate(TaskList) }
             )
         }
         composable<AddTask>{
@@ -30,7 +31,7 @@ fun AppNavigation(){
             val uiState by taskListViewModel.uiState.collectAsStateWithLifecycle()
 
             AddTaskScreen(
-                navigateToTaskList = { navController.navigate(TaskList) },
+                navigateToTaskList = { navController.navigateUp() },
                 taskListViewModel = taskListViewModel,
                 uiState = uiState,
                 onNavigateBack = { navController.navigateUp() }
@@ -41,16 +42,9 @@ fun AppNavigation(){
             TaskListScreen(
                 taskListViewModel = taskListViewModel,
                 onNavigateBack = { navController.navigateUp() },
+                navigateToAddTask = { navController.navigate(AddTask) },
                 navigateToDetails = { task ->
-                    navController.navigate(Details(
-                            id = task.id,
-                            name = task.name,
-                            isCompleted = task.isCompleted,
-                            date = task.date,
-                            time = task.time,
-                            description = task.description,
-                        )
-                    )
+                    navController.navigate(task.toDetails())
                 }
             )
         }
