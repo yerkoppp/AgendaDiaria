@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Agenda Diaria</string>
+    <string name="btn_add_task">Agregar actividad</string>
+    <string name="lc_add_task">No hay actividades registradas.\n¡Agrega una nuevo actividad arriba!</string>
+</resources>
