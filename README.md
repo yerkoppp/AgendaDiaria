@@ -1,6 +1,8 @@
 # Agenda Diaria - App de Tareas para Android
 
-![Logo de la App](app/src/main/res/drawable/logo.webp)
+<p align="center">
+  <img src="app/src/main/res/drawable/logo.webp" alt="Logo de la App" width="200"/>
+</p>
 
 **Agenda Diaria** es una aplicación de gestión de tareas moderna y minimalista para Android, diseñada para ayudarte a organizar tu día de manera eficiente. Creada con las últimas tecnologías recomendadas por Google, esta aplicación ofrece una experiencia de usuario fluida y reactiva.
 
